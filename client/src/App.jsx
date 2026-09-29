@@ -1,7 +1,5 @@
-
 import { useEffect, useState } from 'react';
 import './index.css';
-const I_HAVE_BROKEN = THE_APP_NO_QUOTES
 
 function App() {
   const [tasks, setTasks] = useState([]);
