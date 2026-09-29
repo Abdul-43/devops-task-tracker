@@ -6,7 +6,7 @@ function App() {
   const [error, setError] = useState(null);
 
   const fetchTasks = () => {
-    fetch('http://localhost:5000/api/tasks')
+    fetch('/api/tasks')
       .then(res => {
         if (!res.ok) throw new Error('Failed to fetch');
         return res.json();
@@ -22,7 +22,7 @@ function App() {
   const addTask = (e) => {
     e.preventDefault();
     if (!newTask) return;
-    fetch('http://localhost:5000/api/tasks', {
+    fetch('/api/tasks', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ title: newTask })
@@ -33,7 +33,7 @@ function App() {
   };
 
   const deleteTask = (id) => {
-    fetch(`http://localhost:5000/api/tasks/${id}`, {
+    fetch(`/api/tasks/${id}`, {
       method: 'DELETE'
     }).then(() => {
       fetchTasks();
