@@ -23,15 +23,34 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('Could not connect to MongoDB', err));
 
+// GET all tasks
 app.get('/api/tasks', async (req, res) => {
   try {
     const tasks = await Task.find();
-    if (tasks.length === 0) {
-      return res.json([{ id: 1, title: 'Learn GitHub Actions' }, { id: 2, title: 'Deploy to EC2' }]);
-    }
     res.json(tasks.map(t => ({ id: t._id, title: t.title })));
   } catch (err) {
     res.status(500).json({ error: 'Database error' });
+  }
+});
+
+// CREATE a task
+app.post('/api/tasks', async (req, res) => {
+  try {
+    const task = new Task({ title: req.body.title });
+    await task.save();
+    res.status(201).json({ id: task._id, title: task.title });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to create task' });
+  }
+});
+
+// DELETE a task
+app.delete('/api/tasks/:id', async (req, res) => {
+  try {
+    await Task.findByIdAndDelete(req.params.id);
+    res.status(200).json({ message: 'Task deleted' });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete task' });
   }
 });
 
