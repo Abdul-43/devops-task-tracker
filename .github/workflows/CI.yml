@@ -10,21 +10,17 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-        
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-
-      - name: Run a one-line script
-        run: echo 'Hello world'
-      - name: Display Node.js version
-        run: node --version
-      - name: Display npm version
-        run: npm --version
-      - name: Print Working Directory
-        run: pwd
-      - name: List Files
-        run: ls
-
     
+      - name: Install Client Depen
+        working-directory: client
+        run: npm ci
+
+      - name: Install server Depen
+        working-directory: server
+        run: npm ci
+        
