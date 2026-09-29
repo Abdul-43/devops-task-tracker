@@ -8,6 +8,9 @@ jobs:
   hello_world:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        
       - name: Run a one-line script
         run: echo 'Hello world'
       - name: Display Node.js version
