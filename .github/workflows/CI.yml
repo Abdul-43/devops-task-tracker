@@ -37,7 +37,7 @@ jobs:
       - name: Test Backend
         working-directory: server
         env: 
-          MONGO_URI: ${{secrets.WRONG_MONGO_URI}}
+          MONGO_URI: ${{secrets.MONGO_URI}}
         run: npm test
 
 
