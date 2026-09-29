@@ -34,6 +34,12 @@ jobs:
         working-directory: client
         run: npm run build
 
+      - name: Test Backend
+        working-directory: server
+        env: 
+          MONGO_URI: ${{secrets.WRONG_MONGO_URI}}
+        run: npm test
+
 
   build:
     needs: lint_and_test

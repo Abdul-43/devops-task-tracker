@@ -4,10 +4,13 @@
   "description": "Simple backend for DevOps practice",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "node test.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.21.0"
+    "dotenv": "^18.0.4",
+    "express": "^4.21.0",
+    "mongoose": "^9.10.2"
   }
 }
