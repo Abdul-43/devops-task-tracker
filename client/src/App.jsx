@@ -16,7 +16,7 @@ function App() {
 
   return (
     <div style={{ padding: '20px', fontFamily: 'sans-serif' }}>
-      <h1>DevOps Task Tracker</h1>
+      <h1>DevOps Task Tracker v2</h1>
       {error && <p style={{ color: 'red' }}>Error: {error}</p>}
       <ul>
         {tasks.map(task => (
