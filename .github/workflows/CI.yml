@@ -1,0 +1,15 @@
+name: CI my first pipeline
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  hello_world:
+    runs-on: ubunto-latest
+    steps:
+      - run: echo 'Hello world'
+      - run: node --version
+      - run: npm --version
+
+    
