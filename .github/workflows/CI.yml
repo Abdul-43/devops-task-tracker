@@ -1,64 +1,84 @@
 name: CI my first pipeline
 
 on:
-  push:
-    branches: ["main"]
-  pull_request:
-    branches: ["main"]
+    push:
+        branches: ["main"]
+    pull_request:
+        branches: ["main"]
 
 jobs:
-  lint_and_test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+    lint_and_test:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-    
-      - name: Install Client Depen
-        working-directory: client
-        run: npm ci
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "20"
 
-      - name: Install server Depen
-        working-directory: server
-        run: npm ci
+            - name: Install Client Depen
+              working-directory: client
+              run: npm ci
 
-      - name: Lint Frontend
-        working-directory: client
-        run: npm run lint
+            - name: Install server Depen
+              working-directory: server
+              run: npm ci
 
-      - name: Build frontend
-        working-directory: client
-        run: npm run build
+            - name: Lint Frontend
+              working-directory: client
+              run: npm run lint
 
-      - name: Test Backend
-        working-directory: server
-        env: 
-          MONGO_URI: ${{secrets.MONGO_URI}}
-        run: npm test
+            - name: Build frontend
+              working-directory: client
+              run: npm run build
 
+            - name: Test Backend
+              working-directory: server
+              env:
+                  MONGO_URI: ${{secrets.MONGO_URI}}
+              run: npm test
 
-  build:
-    needs: lint_and_test
-    runs-on: ubuntu-latest
-    steps:
-        - name: Checkout Code
-          uses: actions/checkout@v4
+    build:
+        needs: lint_and_test
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v4
 
-        - name: Setup node.js
-          uses: actions/setup-node@v4
-          with:
-            node-version: '20'
+            - name: Setup node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "20"
 
-        - name: Install client Dep
-          working-directory: client
-          run: npm ci
+            - name: Install client Dep
+              working-directory: client
+              run: npm ci
 
-        - name: Build frontend
-          working-directory: client
-          run: npm run build
+            - name: Build frontend
+              working-directory: client
+              run: npm run build
 
-        
+    deploy:
+        needs: build
+        runs-on: ubuntu-latest
+        steps:
+            - name: Deploy to EC2
+              uses: appleboy/ssh-action@v1.0.3
+              with:
+                  host: ${{ secrets.EC2_HOST }}
+                  username: ${{secrets.EC2_USERNAME}}
+                  key: ${{secrets.EC2_SSH_KEY}}
+                  scripts: |
+                      cd ~/devops-task-tracker
+                      git pull origin main
+                      cd server
+                      npm ci
+                      pm2 restart task-backend
+                      cd ../client
+                      npm ci
+                      npm run build
+                      sudo rm -rf /var/www/html/*
+                      sudo cp -r dist/* /var/www/html/
+                      echo "Deployment Successful"
