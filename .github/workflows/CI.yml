@@ -5,7 +5,7 @@ on:
     branches: ["main"]
 
 jobs:
-  hello_world:
+  lint_and_test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -31,4 +31,26 @@ jobs:
       - name: Build frontend
         working-directory: client
         run: npm run build
+
+
+  build:
+    needs: lint_and_test
+    runs-on: ubuntu-latest
+    steps:
+        - name: Checkout Code
+          uses: actions/checkout@v4
+
+        - name: Setup node.js
+          uses: actions/setup-node@v4
+          with:
+            node-version: '20'
+
+        - name: Install client Dep
+          working-directory: client
+          run: npm ci
+
+        - name: Build frontend
+          working-directory: client
+          run: npm run build
+
         

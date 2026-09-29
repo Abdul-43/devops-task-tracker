@@ -1,4 +1,3 @@
-import { ThisWillBreak } from 'nowhere';
 import { useEffect, useState } from 'react';
 
 function App() {
