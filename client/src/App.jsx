@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import './index.css';
 
 function App() {
   const [tasks, setTasks] = useState([]);
@@ -21,7 +22,7 @@ function App() {
 
   const addTask = (e) => {
     e.preventDefault();
-    if (!newTask) return;
+    if (!newTask.trim()) return;
     fetch('/api/tasks', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -41,28 +42,36 @@ function App() {
   };
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'sans-serif', maxWidth: '500px', margin: '0 auto' }}>
-      <h1>DevOps Task Tracker v2</h1>
-      {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+    <div className="app-container">
+      <h1>DevOps CI/CD Magic ✨</h1>
+      {error && <p style={{ color: '#ef4444', textAlign: 'center' }}>Error: {error}</p>}
       
-      <form onSubmit={addTask} style={{ marginBottom: '20px' }}>
+      <form onSubmit={addTask} className="input-form">
         <input 
           type="text" 
           value={newTask} 
           onChange={(e) => setNewTask(e.target.value)} 
-          placeholder="Add a new task..."
-          style={{ padding: '8px', width: '70%', marginRight: '10px' }}
+          placeholder="What do you need to deploy today?"
         />
-        <button type="submit" style={{ padding: '8px 15px' }}>Add Task</button>
+        <button type="submit">Add Task</button>
       </form>
 
-      <ul style={{ listStyle: 'none', padding: 0 }}>
-        {tasks.map(task => (
-          <li key={task.id} style={{ display: 'flex', justifyContent: 'space-between', padding: '10px', borderBottom: '1px solid #ccc' }}>
-            {task.title}
-            <button onClick={() => deleteTask(task.id)} style={{ background: 'red', color: 'white', border: 'none', padding: '5px 10px', cursor: 'pointer', borderRadius: '4px' }}>Delete</button>
-          </li>
-        ))}
+      <ul className="task-list">
+        {tasks.length === 0 && !error ? (
+          <p style={{ textAlign: 'center', color: '#94a3b8' }}>No tasks yet. Add one!</p>
+        ) : (
+          tasks.map(task => (
+            <li key={task.id} className="task-item">
+              <span>{task.title}</span>
+              <button 
+                onClick={() => deleteTask(task.id)} 
+                className="delete-btn"
+              >
+                Delete
+              </button>
+            </li>
+          ))
+        )}
       </ul>
     </div>
   );
