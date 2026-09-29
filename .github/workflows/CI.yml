@@ -3,6 +3,8 @@ name: CI my first pipeline
 on:
   push:
     branches: ["main"]
+  pull_request:
+    branches: ["main"]
 
 jobs:
   lint_and_test:
