@@ -8,8 +8,11 @@ jobs:
   hello_world:
     runs-on: ubuntu-latest
     steps:
-      - run: echo 'Hello world'
-      - run: node --version
-      - run: npm --version
+      - name: Run a one-line script
+        run: echo 'Hello world'
+      - name: Display Node.js version
+        run: node --version
+      - name: Display npm version
+        run: npm --version
 
     
