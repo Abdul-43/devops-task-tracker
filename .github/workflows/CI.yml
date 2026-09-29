@@ -14,5 +14,9 @@ jobs:
         run: node --version
       - name: Display npm version
         run: npm --version
+      - name: Print Working Directory
+        run: pwd
+      - name: List Files
+        run: ls
 
     
